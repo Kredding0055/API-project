@@ -24,6 +24,7 @@ module.exports = router;
 
 // backend/routes/api/index.js
 // ...
+// Will use during Mod 5 frontend setup...KR
 
 // router.post('/test', function(req, res) {
 //     res.json({ requestBody: req.body });
