@@ -19,6 +19,7 @@ router.get("/api/csrf/restore", (req, res) => {
   });
 });
 // ...
+router.get("/", (req, res) => { res.send("foo") })
 
 // backend/routes/index.js
 // ...
