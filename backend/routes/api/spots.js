@@ -11,12 +11,23 @@ const { check } = require('express-validator');
 //imports a function for handling errors
 const { handleValidationErrors } = require('../../utils/validation');
 //imports the Spot model
-const { Spot } = require('../../db/models');
+const { Spot, sequelize, Review } = require('../../db/models');
 
 
 
 router.get('/:id', async (req, res, next) => {
-    const spotId = await Spot.findByPk(req.params.id);
+    const spotId = await Spot.findByPk(req.params.id,
+        {
+        include: [{
+            model: Review,
+            attributes: [],
+        } ],
+        attributes: {
+            include: [
+                [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating'],
+            ],
+        }
+    });
     // console.log("SPOT SPOT SPOT SPOT SPOT ", spotId)
     if(spotId) {
         res.json(spotId)
@@ -28,7 +39,20 @@ router.get('/:id', async (req, res, next) => {
 })
 
 router.get('/', async (req, res, next) => {
-    const allSpots = await Spot.findAll()
+    const allSpots = await Spot.findAll({
+        include: [{
+            model: Review,
+            attributes: [],
+        } ],
+        attributes: {
+            include: [
+                [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating'],
+            ],
+        },
+        group: [
+            'Spot.id'
+        ],
+    });
     res.status(200).json({
       allSpots
     })
