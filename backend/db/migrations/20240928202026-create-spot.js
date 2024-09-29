@@ -70,12 +70,6 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      avgRating: {
-        type: Sequelize.DECIMAL
-      },
-      previewImage:{ 
-        type: Sequelize.BLOB
-      }
     }, options);
   },
   async down(queryInterface, Sequelize) {

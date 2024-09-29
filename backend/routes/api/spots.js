@@ -83,8 +83,6 @@ router.post('/', validateSpot, async (req, res,) => {
         lat,
         lng,
         price,
-        avgRating,
-        previewImage
     });
 
     res.status(201)

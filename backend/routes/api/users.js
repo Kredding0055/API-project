@@ -19,11 +19,11 @@ const validateSignup = [
     check('email')
       .exists({ checkFalsy: true })
       .isEmail()
-      .withMessage('Please provide a valid email.'),
+      .withMessage( "Invalid email"),
     check('username')
       .exists({ checkFalsy: true })
       .isLength({ min: 4 })
-      .withMessage('Please provide a username with at least 4 characters.'),
+      .withMessage( "Username is required"),
     check('username')
       .not()
       .isEmail()
@@ -32,6 +32,12 @@ const validateSignup = [
       .exists({ checkFalsy: true })
       .isLength({ min: 6 })
       .withMessage('Password must be 6 characters or more.'),
+    check('firstName')
+      .exists({checkFalsy: true})
+      .withMessage("First Name is required"),
+    check('lastName')
+      .exists({checkFalsy: true})
+      .withMessage("Last Name is required"),
     handleValidationErrors
 ];
 
@@ -42,25 +48,41 @@ const validateSignup = [
 router.post(
   '/',
   validateSignup,
-  async (req, res) => {
+  async (req, res, next) => {
     const { firstName, lastName, email, password, username } = req.body;
     const hashedPassword = bcrypt.hashSync(password);
-    const user = await User.create({ firstName, lastName, email, username, hashedPassword });
+    try {
+        
+        const user = await User.create({ firstName, lastName, email, username, hashedPassword });
 
-    const safeUser = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      username: user.username,
-    };
+        const safeUser = {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            username: user.username,
+        };
 
-    await setTokenCookie(res, safeUser);
+        await setTokenCookie(res, safeUser);
 
-    return res.json({
-      user: safeUser
-    });
-  }
+        return res.status(201).json({
+            user: safeUser
+        });
+      } 
+      catch (e)  {
+        const err = new Error('User already exists');
+        err.status = 500;
+        if(e.errors.filter(e => e.path === 'email').length > 0) {
+            err.errors = { "email": "User with that email already exists"}
+        }
+        if(e.errors.filter(e => e.path === 'username').length > 0) {
+            err.errors = {"username": "User with that username already exists"}
+        }
+        next(err);
+        console.log(e)
+      }
+  },
+  
 );
 
 
