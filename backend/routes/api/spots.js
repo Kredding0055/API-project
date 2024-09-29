@@ -15,8 +15,18 @@ const { Spot, sequelize, Review } = require('../../db/models');
 
 
 
-router.get('/:id', async (req, res, next) => {
-    const spotId = await Spot.findByPk(req.params.id,
+// Get all spots owned by current user
+router.get('/current', requireAuth, async (req, res, next) => {
+  const ownerSpots = await Spot.findAll({
+    where: {
+      ownerId: req.user.id
+    }
+  })
+  res.json(ownerSpots);
+});
+
+router.get('/:spotId', async (req, res, next) => {
+    const spotId = await Spot.findByPk(req.params.spotId,
         {
         include: [{
             model: Review,
@@ -63,37 +73,37 @@ router.get('/', async (req, res, next) => {
 const validateSpot = [
     check('address')
       .exists({ checkFalsy: true })
-      .withMessage('needs address'),
+      .withMessage( "Street address is required"),
     check('city')
       .exists({ checkFalsy: true })
-      .withMessage('needs city'),
+      .withMessage("City is required"),
     check('state')
       .exists({ checkFalsy: true })
-      .withMessage('needs state'),
+      .withMessage("State is required"),
     check('country')
       .exists({ checkFalsy: true })
-      .withMessage('needs country'),
+      .withMessage("Country is required"),
     check('name')
       .exists({ checkFalsy: true })
-      .withMessage('needs name'),
+      .withMessage("Name must be less than 50 characters"),
     check('description')
       .exists({ checkFalsy: true })
       .withMessage('needs description'),
     check('lat')
       .exists({ checkFalsy: true })
-      .withMessage('needs latitude'),
+      .withMessage("Latitude is not valid"),
     check('lng')
       .exists({ checkFalsy: true })
-      .withMessage('needs longitude'),
+      .withMessage("Longitude is not valid"),
     check('price')
       .exists({ checkFalsy: true })
-      .withMessage('needs price'),
+      .withMessage("Price per day is required"),
     handleValidationErrors
 ];
 
 //create a spot
-router.post('/', validateSpot, async (req, res,) => {
-    console.log(req.body)
+router.post('/', requireAuth, validateSpot, async (req, res,) => {
+    // console.log(req.body)
     //get all info from req body
     const {address, city, state, country, name, description, lat, lng, price} = req.body;
     //create new instance of spot
@@ -107,10 +117,50 @@ router.post('/', validateSpot, async (req, res,) => {
         lat,
         lng,
         price,
+        ownerId: req.user.id
     });
 
     res.status(201)
     res.json(newSpot)
+});
+
+const exists = async (req, res, next) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  if(spot === null) {
+    const err = new Error("message: Spot couldn't be found");
+    err.status = 404;
+    next(err)
+  }
+  else {
+    req.spot = spot;
+    next();
+  }
+}
+
+const isOwned = async (req, res, next) => {
+
+  if(req.user.id !== req.spot.ownerId) {
+    const err = new Error('Require proper authorization: Spot must belong to the current user');
+    err.status = 403;
+    next(err)
+  }
+  else {
+    next();
+  }
+}
+
+// Edit a spot
+router.put('/:spotId', requireAuth, exists, isOwned, validateSpot, async (req, res, next) => {
+  const updated = await req.spot.update(req.body)
+
+  res.json(updated)
 })
+
+// Delete a spot
+router.delete('/:spotId', requireAuth, exists, isOwned, async (req, res, next) => {
+  await req.spot.destroy()
+  res.json({ "message": "Successfully deleted"})
+}) 
 
 module.exports = router;

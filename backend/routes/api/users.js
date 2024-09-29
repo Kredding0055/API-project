@@ -79,7 +79,6 @@ router.post(
             err.errors = {"username": "User with that username already exists"}
         }
         next(err);
-        console.log(e)
       }
   },
   
