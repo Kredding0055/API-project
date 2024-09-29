@@ -36,7 +36,10 @@ router.get('/:spotId', async (req, res, next) => {
             include: [
                 [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating'],
             ],
-        }
+        },
+        group: [
+          'Spot.id'
+        ],
     });
     if(spotId) {
         res.json(spotId)
