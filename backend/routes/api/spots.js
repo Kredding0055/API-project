@@ -38,7 +38,6 @@ router.get('/:spotId', async (req, res, next) => {
             ],
         }
     });
-    // console.log("SPOT SPOT SPOT SPOT SPOT ", spotId)
     if(spotId) {
         res.json(spotId)
     }

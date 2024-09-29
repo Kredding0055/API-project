@@ -41,14 +41,6 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      spotId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Spots',
-          key: 'id',
-        },
-        onDelete: 'CASCADE'
-      },
     }, options);
   },
   async down(queryInterface, Sequelize) {
