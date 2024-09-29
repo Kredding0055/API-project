@@ -29,7 +29,12 @@
 
 const { Spot } = require('../models');
 
-/** @type {import('sequelize-cli').Migration} */
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+
+// /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
     await Spot.bulkCreate([
@@ -57,25 +62,14 @@ module.exports = {
         avgRating: 4.5,
         previewImage: "image"
       },
-    ])
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
+    ], options);
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Spots', null, {});
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    options.tableName = 'Spots';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      name: { [Op.in]: ['testSpot1', 'testSpot2'] }
+    }, {});
   }
 };
