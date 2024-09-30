@@ -9,7 +9,8 @@ const { check } = require('express-validator');
 //imports a function for handling errors
 const { handleValidationErrors } = require('../../utils/validation');
 //imports the Spot and Review model
-const { Spot, sequelize, Review, User, SpotImage, ReviewImage } = require('../../db/models');
+const { Spot, sequelize, Review, User, SpotImage, ReviewImage, Sequelize } = require('../../db/models');
+const { Op } = require('sequelize')
 
 const avgRating = (spot) => {
   let reviewCount = spot.Reviews.length
@@ -34,7 +35,9 @@ const cleanedSpots = (allSpots) => {
         spotReturn.previewIme = null
       }
     });
-    spotReturn.avgRating = avgRating(spotReturn)
+    if(spotReturn.avgRating === undefined) {
+      spotReturn.avgRating = avgRating(spotReturn)
+    }
     return spotReturn
   })
   return spotObject
@@ -201,7 +204,19 @@ router.get('/:spotId', async (req, res, next) => {
 // Get all spots
 router.get('/', async (req, res, next) => {
     console.log(req.query)
-
+    let where = {}
+    if (req.query.minLat) {
+      where.lat = { [Op.gt] : req.query.minLat};
+    }
+    if(req.query.maxLat) {
+      where.lat = { [Op.lt] : req.query.maxLat}
+    }
+    if(req.query.minPrice) {
+      where.price = {[Op.gt] : req.query.minPrice}
+    }
+    if(req.query.maxPrice) {
+      where.price = { [Op.lt] : req.query.maxPrice}
+    }
     let page = req.query.page || 1
     let size = req.query.size || 20
     const allSpots = await Spot.findAll({
@@ -212,12 +227,9 @@ router.get('/', async (req, res, next) => {
             model: SpotImage,
             attributes: ['id', 'url', 'preview'],
         } ],
-        // attributes: {
-        //     include: [
-        //         [sequelize.literal("`(SELECT AVG(Reviews.stars) FROM Reviews WHERE Reviews.spotId = Spots.id)`") , "avgRating"],
-        //     ],
-        // },
+        
         limit: size,
+        where: where,
         offset: size * (page - 1)
     });
     spotObject = cleanedSpots(allSpots)
