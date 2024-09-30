@@ -84,27 +84,42 @@ const isOwned = async (req, res, next) => {
   }
 }
 
-// const validateQuery = [
-//   check('page')
-//     .isInt({min: 1})
-//     .withMessage( "Page must be greater than or equal to 1"),
-//   check('size')
-//     .isInt({min: 1})
-//     .withMessage( "Size must be greater than or equal to 1"),
-//   check('minLat')
-//     .isInt()
-//     .withMessage("Minimum latitude is invalid"),
-//   check('maxLat')
-//     .,
-//   check('minLng')
-//     .apply,
-//   check('maxLng')
-//     .,
-//   check('minPrice')
-//     .,
-//   check('maxPrice')
-//   handleValidationErrors
-// ]
+const validateQuery = [
+  check('page')
+    .optional()
+    .isInt({min: 1})
+    .withMessage( "Page must be greater than or equal to 1"),
+  check('size')
+    .optional()
+    .isInt({min: 1})
+    .withMessage( "Size must be greater than or equal to 1"),
+  check('minLat')
+    .optional()
+    .isFloat()
+    .withMessage("Minimum latitude is invalid"),
+  check('maxLat')
+  .optional()
+    .optional()
+    .isFloat()
+    .withMessage("Maximum latitude is invalid"),
+  check('minLng')
+    .optional()
+    .isFloat( "Maximum longitude is invalid")
+    .withMessage(''),
+  check('maxLng')
+    .optional()
+    .isFloat( "Maximum longitude is invalid")
+    .withMessage(''),
+  check('minPrice')
+    .optional()
+    .isFloat()
+    .withMessage( "Minimum price must be greater than or equal to 0"),
+  check('maxPrice')
+    .optional()
+    .isFloat()
+    .withMessage("Maximum price must be greater than or equal to 0"),
+  handleValidationErrors
+]
 
 const validateReview = [
   check('review')
