@@ -28,7 +28,7 @@ const exists = async (req, res, next) => {
     const review = await Review.findByPk(req.params.reviewId);
 
     if(review === null) {
-      const err = new Error("message: Review couldn't be found");
+      const err = new Error("Review couldn't be found");
       err.status = 404;
       next(err)
     }
@@ -99,7 +99,7 @@ const cleanedSpots = (allSpots) => {
               reviewReturn[ele] = review.dataValues[ele]
             }
             else {
-                reviewReturn.spot = cleanedSpots([review.Spot])[0]
+                reviewReturn.Spot = cleanedSpots([review.Spot])[0]
             }
           });
           return reviewReturn
@@ -118,7 +118,10 @@ router.get('/current', requireAuth, async (req, res, next) => {
         },{
             model: ReviewImage,
             attributes: [ 'id', 'url']
-        }],
+        },{
+          model: User
+        },
+      ],
         where: {
             userId: req.user.id
         }

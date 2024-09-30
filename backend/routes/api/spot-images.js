@@ -32,7 +32,7 @@ const isOwned = async (req, res, next) => {
     });
   
     if(spotImage === null) {
-      const err = new Error("Spot image couldn't be found");
+      const err = new Error("Spot Image couldn't be found");
       err.status = 404;
       next(err)
     }
