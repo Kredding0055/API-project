@@ -29,7 +29,7 @@ const isOwned = async (req, res, next) => {
     });
   
     if(reviewImage === null) {
-      const err = new Error("Review image couldn't be found");
+      const err = new Error("Review Image couldn't be found");
       err.status = 404;
       next(err)
     }
