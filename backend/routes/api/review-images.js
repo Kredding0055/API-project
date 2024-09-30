@@ -9,11 +9,11 @@ const { check } = require('express-validator');
 //imports a function for handling errors
 const { handleValidationErrors } = require('../../utils/validation');
 
-const { Review}
+const { ReviewImage } = require('../../db/models')
 
 const isOwned = async (req, res, next) => {
 
-    if(req.user.id !== req.spot.ownerId) {
+    if(req.user.id !== req.reviewImage.Review.userId) {
       const err = new Error('Require proper authorization: Spot must belong to the current user');
       err.status = 403;
       next(err)
@@ -24,20 +24,23 @@ const isOwned = async (req, res, next) => {
   }
 
   const exists = async (req, res, next) => {
-    const spot = await Spot.findByPk(req.params.spotId);
+    const reviewImage = await ReviewImage.findByPk(req.params.imageId);
   
-    if(spot === null) {
-      const err = new Error("message: Spot couldn't be found");
+    if(reviewImage === null) {
+      const err = new Error("message: Review image couldn't be found");
       err.status = 404;
       next(err)
     }
     else {
-      req.spot = spot;
+      req.reviewImage = reviewImage;
       next();
     }
   }
 
 
-router.delete('/:imageId', requireAuth,  )
+router.delete('/:imageId', requireAuth, exists, isOwned, async (req, res, next) => {
+    await req.reviewImage.destroy()
+    res.json({ "message": "Successfully deleted"})
+})
 
 module.exports = router;

@@ -9,8 +9,8 @@ const { check } = require('express-validator');
 //imports a function for handling errors
 const { handleValidationErrors } = require('../../utils/validation');
 //imports the Spot and Review model
-const { Spot, sequelize, Review, User, SpotImage } = require('../../db/models');
-const user = require('../../db/models/user');
+const { Spot, sequelize, Review, User, SpotImage, ReviewImage } = require('../../db/models');
+
 
 const cleanedSpots = (allSpots) => {
   const spotObject = allSpots.map(spot => {
@@ -115,7 +115,13 @@ router.get('/current', requireAuth,  async (req, res, next) => {
 // Get reviews on a spot
 router.get('/:spotId/reviews', exists, async (req, res, next) => {
   const reviews = await Review.findAll({
-    include: User,
+    include: [
+      { model: User,
+        attributes: [ 'id', 'firstName', 'lastName']
+      }, {
+        model: ReviewImage,
+        attributes: ['id', 'url']
+      }],
     where: {
       spotId: req.params.spotId
     }

@@ -9,9 +9,8 @@ const { check } = require('express-validator');
 //imports a function for handling errors
 const { handleValidationErrors } = require('../../utils/validation');
 //imports the Spot and Review model
-const { Spot, sequelize, Review } = require('../../db/models');
-//imports the spot route
-const { route } = require('./spots');
+const { Spot, sequelize, Review, ReviewImage, SpotImage } = require('../../db/models');
+
 
 
   const validateReview = [
@@ -51,30 +50,80 @@ const isOwned = async (req, res, next) => {
     }
 }
 
-// const tooManyPictures = async (req, res, next) => {
-//     const pics = await spotImage.count({
-//         where: {
-//             spotImageId: ,
-//             reviewId: 
-//         }
-//     })
-//     if(pics > 10) {
-//         err = new Error("Maximum number of images for this resource was reached")
-//         next(err)
-//     }
-//     else {
-//         next()
-//     }
-// }
+const tooManyPictures = async (req, res, next) => {
+    const pics = await ReviewImage.count({
+        where: {
+            reviewId: req.params.reviewId
+        }
+    })
+    if(pics >= 10) {
+        err = new Error("Maximum number of images for this resource was reached")
+        err.status = 403
+        next(err)
+    }
+    else {
+        next()
+    }
+}
+
+const cleanedSpots = (allSpots) => {
+    const spotObject = allSpots.map(spot => {
+      let spotReturn = {};
+      console.log(spot)
+  
+      Object.keys(spot.dataValues).forEach(ele => {
+        if(ele !== "SpotImages") {
+          spotReturn[ele] = spot.dataValues[ele]
+        }
+        else if(spot[ele].filter(i => i.dataValues.preview).length > 0) {
+          spotReturn.previewIme = spot.SpotImages.filter(x => x.dataValues.preview)[0].dataValues.url
+          console.log(spot[ele])
+        }
+        else {
+          spotReturn.previewIme = null
+        }
+      });
+    //   console.log(spotReturn)
+      return spotReturn
+    })
+    
+    return spotObject
+  }
+
+  const cleanReview = (allReviews) => {
+    const reviewObject = allReviews.map(review => {
+        let reviewReturn = {};
+
+        Object.keys(review.dataValues).forEach(ele => {
+            if(ele !== "Spot") {
+              reviewReturn[ele] = review.dataValues[ele]
+            }
+            else {
+                reviewReturn.spot = cleanedSpots([review.Spot])[0]
+            }
+          });
+          return reviewReturn
+    })
+    return reviewObject
+  }
 
 // Get reviews for the current user
 router.get('/current', requireAuth, async (req, res, next) => {
-    const reviews = await Review.findAll({
-        include: Spot,
+    let reviews = await Review.findAll({
+        include: [{
+            model: Spot, 
+            include: {
+                model: SpotImage
+            }
+        },{
+            model: ReviewImage,
+            attributes: [ 'id', 'url']
+        }],
         where: {
             userId: req.user.id
         }
     })
+    reviews = cleanReview(reviews)
     res.json({'reviews': reviews});
 })
 
@@ -86,7 +135,14 @@ router.put('/:reviewId', requireAuth, exists, isOwned, validateReview, async (re
 })
 
 // Post an image on a review
-router.post('/:reviewId/images', requireAuth, exists, isOwned )
+router.post('/:reviewId/images', requireAuth, exists, isOwned, tooManyPictures, async (req, res, next) => {
+    const reviewImage = await ReviewImage.create(Object.assign(req.body, {
+        reviewId: req.params.reviewId
+    }))
+    const imageReturn = {};
+  ({id: imageReturn.id, url: imageReturn.url} = reviewImage)
+    res.status(201).json(imageReturn);
+} )
 
 // Delete a review
 router.delete('/:reviewId', requireAuth, exists, isOwned, async (req, res, next) => {
