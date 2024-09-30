@@ -11,6 +11,13 @@ const { handleValidationErrors } = require('../../utils/validation');
 //imports the Spot and Review model
 const { Spot, sequelize, Review, User, SpotImage, ReviewImage } = require('../../db/models');
 
+const avgRating = (spot) => {
+  let reviewCount = spot.Reviews.length
+  if(reviewCount > 0){
+    return spot.Reviews.map(review => review.stars).reduce((p, c) => p + c) /reviewCount;
+  }
+  return 0;
+}
 
 const cleanedSpots = (allSpots) => {
   const spotObject = allSpots.map(spot => {
@@ -22,12 +29,12 @@ const cleanedSpots = (allSpots) => {
       }
       else if(spot[ele].filter(i => i.dataValues.preview).length > 0) {
         spotReturn.previewIme = spot.SpotImages.filter(x => x.dataValues.preview)[0].dataValues.url
-        console.log(spot[ele])
       }
       else {
         spotReturn.previewIme = null
       }
     });
+    spotReturn.avgRating = avgRating(spotReturn)
     return spotReturn
   })
   return spotObject
@@ -193,32 +200,31 @@ router.get('/:spotId', async (req, res, next) => {
 
 // Get all spots
 router.get('/', async (req, res, next) => {
+    console.log(req.query)
+
+    let page = req.query.page || 1
+    let size = req.query.size || 20
     const allSpots = await Spot.findAll({
         include: [{
             model: Review,
-            attributes: [],
+            attributes: ['stars'],
         }, {
             model: SpotImage,
-            attributes: ['url', 'preview'],
+            attributes: ['id', 'url', 'preview'],
         } ],
-        attributes: {
-            include: [
-                [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating'],
-            ],
-        },
-        group: [
-            'Spot.id',
-            'SpotImages.id'
-        ],
+        // attributes: {
+        //     include: [
+        //         [sequelize.literal("`(SELECT AVG(Reviews.stars) FROM Reviews WHERE Reviews.spotId = Spots.id)`") , "avgRating"],
+        //     ],
+        // },
+        limit: size,
+        offset: size * (page - 1)
     });
-    // console.log(allSpots)
     spotObject = cleanedSpots(allSpots)
-    // console.log(spotObject)
     res.status(200).json({
      "Spots": spotObject
     })
 })
-
 
   // middleware
 const validateSpot = [
