@@ -119,7 +119,7 @@ router.get('/current', requireAuth,  async (req, res, next) => {
   ],
 });
   spotObject = cleanedSpots(ownerSpots)
-  res.json(spotObject);
+  res.json({"Spots": spotObject});
 });
 
 // Get reviews on a spot
