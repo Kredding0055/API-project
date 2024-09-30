@@ -14,9 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     this.hasMany(models.Spot, {
       foreignKey: 'ownerId'
     })
+    this.hasMany(models.Review, {
+      foreignKey: 'userId'
+    })
   }
 }
-
   User.init(
     {
       firstName: {

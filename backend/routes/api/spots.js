@@ -2,18 +2,56 @@
 const express = require('express')
 //creates a new router for this route
 const router = express.Router();
-//Used for hashing passwords
-const bcrypt = require('bcryptjs');
 //imports key functions from utils/auth.js. setTokenCookie creates JWT token, requireAuth verifies 'user' from a token
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 //used for validating and sanitizing request data
 const { check } = require('express-validator');
 //imports a function for handling errors
 const { handleValidationErrors } = require('../../utils/validation');
-//imports the Spot model
-const { Spot, sequelize, Review } = require('../../db/models');
+//imports the Spot and Review model
+const { Spot, sequelize, Review, User } = require('../../db/models');
+const user = require('../../db/models/user');
 
+const exists = async (req, res, next) => {
+  const spot = await Spot.findByPk(req.params.spotId);
 
+  if(spot === null) {
+    const err = new Error("message: Spot couldn't be found");
+    err.status = 404;
+    next(err)
+  }
+  else {
+    req.spot = spot;
+    next();
+  }
+}
+
+const reviewExistsForUser = async (req, res, next) => {
+  const reviews = await Review.count({
+    where: {
+      userId: req.user.id,
+      spotId: req.spot.id
+    }
+  })
+  if(reviews > 0) {
+    err = new Error("User already has a review for this spot")
+    next(err)
+  }
+  else {
+    next()
+  }
+}
+
+const validateReview = [
+  check('review')
+    .exists({checkFalsy: true})
+    .withMessage("Review text is required"),
+  check('stars')
+    .exists({ checkFalsy: true})
+    .isInt({min: 1, max: 5})
+    .withMessage("Stars must be an integer from 1 to 5"),
+  handleValidationErrors
+];
 
 // Get all spots owned by current user
 router.get('/current', requireAuth, async (req, res, next) => {
@@ -25,6 +63,31 @@ router.get('/current', requireAuth, async (req, res, next) => {
   res.json(ownerSpots);
 });
 
+// Get reviews on a spot
+router.get('/:spotId/reviews', exists, async (req, res, next) => {
+  const reviews = await Review.findAll({
+    include: User,
+    where: {
+      spotId: req.params.spotId
+    }
+  })
+  res.json({'reviews': reviews});
+})
+
+// Post a review on a spot
+router.post('/:spotId/reviews', requireAuth, exists, reviewExistsForUser, validateReview, async (req, res, next) => {
+  const review = await Review.create(Object.assign(
+    req.body,
+    {userId: req.user.id,
+     spotId: req.spot.id
+    },
+  ));
+
+  
+  res.status(201).json(review);
+})
+
+// Get a spot by it's ID
 router.get('/:spotId', async (req, res, next) => {
     const spotId = await Spot.findByPk(req.params.spotId,
         {
@@ -50,6 +113,7 @@ router.get('/:spotId', async (req, res, next) => {
     } 
 })
 
+// Get all spots
 router.get('/', async (req, res, next) => {
     const allSpots = await Spot.findAll({
         include: [{
@@ -75,7 +139,7 @@ router.get('/', async (req, res, next) => {
 const validateSpot = [
     check('address')
       .exists({ checkFalsy: true })
-      .withMessage( "Street address is required"),
+      .withMessage("Street address is required"),
     check('city')
       .exists({ checkFalsy: true })
       .withMessage("City is required"),
@@ -105,7 +169,6 @@ const validateSpot = [
 
 //create a spot
 router.post('/', requireAuth, validateSpot, async (req, res,) => {
-    // console.log(req.body)
     //get all info from req body
     const {address, city, state, country, name, description, lat, lng, price} = req.body;
     //create new instance of spot
@@ -126,19 +189,6 @@ router.post('/', requireAuth, validateSpot, async (req, res,) => {
     res.json(newSpot)
 });
 
-const exists = async (req, res, next) => {
-  const spot = await Spot.findByPk(req.params.spotId);
-
-  if(spot === null) {
-    const err = new Error("message: Spot couldn't be found");
-    err.status = 404;
-    next(err)
-  }
-  else {
-    req.spot = spot;
-    next();
-  }
-}
 
 const isOwned = async (req, res, next) => {
 
