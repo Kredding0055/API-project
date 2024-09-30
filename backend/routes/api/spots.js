@@ -29,10 +29,10 @@ const cleanedSpots = (allSpots) => {
         spotReturn[ele] = spot.dataValues[ele]
       }
       else if(spot[ele].filter(i => i.dataValues.preview).length > 0) {
-        spotReturn.previewIme = spot.SpotImages.filter(x => x.dataValues.preview)[0].dataValues.url
+        spotReturn.previewImage = spot.SpotImages.filter(x => x.dataValues.preview)[0].dataValues.url
       }
       else {
-        spotReturn.previewIme = null
+        spotReturn.previewImage = null
       }
     });
     if(spotReturn.avgRating === undefined) {
@@ -46,7 +46,7 @@ const exists = async (req, res, next) => {
   const spot = await Spot.findByPk(req.params.spotId);
 
   if(spot === null) {
-    const err = new Error("message: Spot couldn't be found");
+    const err = new Error("Spot couldn't be found");
     err.status = 404;
     next(err)
   }
@@ -138,7 +138,7 @@ router.get('/:spotId/reviews', exists, async (req, res, next) => {
       spotId: req.params.spotId
     }
   })
-  res.json({'reviews': reviews});
+  res.json({'Reviews': reviews});
 })
 
 router.post('/:spotId/images', requireAuth, exists, isOwned, async (req, res, next) => {
@@ -168,7 +168,7 @@ router.post('/:spotId/reviews', requireAuth, exists, reviewExistsForUser, valida
 })
 
 // Get a spot by it's ID
-router.get('/:spotId', async (req, res, next) => {
+router.get('/:spotId', exists, async (req, res, next) => {
     const spotId = await Spot.findByPk(req.params.spotId,
         {
         include: [{
@@ -186,7 +186,8 @@ router.get('/:spotId', async (req, res, next) => {
       ],
         attributes: {
             include: [
-                [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating'],
+                [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgStarRating'],
+                [sequelize.fn('COUNT', sequelize.col('Reviews.stars')), 'numReviews']
             ],
         },
         group: [
@@ -198,10 +199,6 @@ router.get('/:spotId', async (req, res, next) => {
     if(spotId) {
         res.json(spotId)
     }
-    else {
-        res.json({"message": "Spot couldn't be found"});
-        res.status(404);
-    } 
 })
 
 // Get all spots

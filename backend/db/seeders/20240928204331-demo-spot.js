@@ -48,6 +48,7 @@ module.exports = {
         lat: 12,
         lng: 12,
         price: 12,
+        ownerId: 1
       },
       {
         address: 'testSpot2',
@@ -59,6 +60,7 @@ module.exports = {
         lat: 12,
         lng: 12,
         price: 12,
+        ownerId: 1
       },
     ], options);
   },

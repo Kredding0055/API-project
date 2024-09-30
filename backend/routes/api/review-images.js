@@ -9,10 +9,10 @@ const { check } = require('express-validator');
 //imports a function for handling errors
 const { handleValidationErrors } = require('../../utils/validation');
 
-const { ReviewImage } = require('../../db/models')
+const { ReviewImage, Review } = require('../../db/models')
 
 const isOwned = async (req, res, next) => {
-
+    console.log(req.reviewImage)
     if(req.user.id !== req.reviewImage.Review.userId) {
       const err = new Error('Require proper authorization: Spot must belong to the current user');
       err.status = 403;
@@ -24,10 +24,12 @@ const isOwned = async (req, res, next) => {
   }
 
   const exists = async (req, res, next) => {
-    const reviewImage = await ReviewImage.findByPk(req.params.imageId);
+    const reviewImage = await ReviewImage.findByPk(req.params.imageId, {
+      include: Review
+    });
   
     if(reviewImage === null) {
-      const err = new Error("message: Review image couldn't be found");
+      const err = new Error("Review image couldn't be found");
       err.status = 404;
       next(err)
     }

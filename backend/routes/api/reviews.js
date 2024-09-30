@@ -124,7 +124,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
         }
     })
     reviews = cleanReview(reviews)
-    res.json({'reviews': reviews});
+    res.json({'Reviews': reviews});
 })
 
 // Edit a review
