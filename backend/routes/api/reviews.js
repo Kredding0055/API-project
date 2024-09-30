@@ -10,6 +10,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 //imports the Spot and Review model
 const { Spot, sequelize, Review } = require('../../db/models');
+//imports the spot route
 const { route } = require('./spots');
 
 
@@ -84,6 +85,7 @@ router.put('/:reviewId', requireAuth, exists, isOwned, validateReview, async (re
     res.json(updatedReview)
 })
 
+// Post an image on a review
 router.post('/:reviewId/images', requireAuth, exists, isOwned )
 
 // Delete a review

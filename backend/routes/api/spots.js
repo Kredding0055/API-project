@@ -9,9 +9,30 @@ const { check } = require('express-validator');
 //imports a function for handling errors
 const { handleValidationErrors } = require('../../utils/validation');
 //imports the Spot and Review model
-const { Spot, sequelize, Review, User } = require('../../db/models');
+const { Spot, sequelize, Review, User, SpotImage } = require('../../db/models');
 const user = require('../../db/models/user');
 
+const cleanedSpots = (allSpots) => {
+  const spotObject = allSpots.map(spot => {
+    let spotReturn = {};
+
+    Object.keys(spot.dataValues).forEach(ele => {
+      if(ele !== "SpotImages") {
+        spotReturn[ele] = spot[ele]
+      }
+      else if(spot[ele].filter(i => i.dataValues.preview).length > 0) {
+        spotReturn.previewIme = spot.SpotImages.filter(x => x.dataValues.preview)[0].dataValues.url
+        console.log(spot[ele])
+      }
+      else {
+        spotReturn.previewIme = null
+        console.log(spot[ele])
+      }
+    });
+    return spotReturn
+  })
+  return spotObject
+}
 const exists = async (req, res, next) => {
   const spot = await Spot.findByPk(req.params.spotId);
 
@@ -42,6 +63,18 @@ const reviewExistsForUser = async (req, res, next) => {
   }
 }
 
+const isOwned = async (req, res, next) => {
+
+  if(req.user.id !== req.spot.ownerId) {
+    const err = new Error('Require proper authorization: Spot must belong to the current user');
+    err.status = 403;
+    next(err)
+  }
+  else {
+    next();
+  }
+}
+
 const validateReview = [
   check('review')
     .exists({checkFalsy: true})
@@ -54,13 +87,29 @@ const validateReview = [
 ];
 
 // Get all spots owned by current user
-router.get('/current', requireAuth, async (req, res, next) => {
+router.get('/current', requireAuth,  async (req, res, next) => {
   const ownerSpots = await Spot.findAll({
-    where: {
+    where:{
       ownerId: req.user.id
-    }
-  })
-  res.json(ownerSpots);
+    },
+    include: [{
+      model: Review,
+      attributes: [],
+  }, {
+      model: SpotImage,
+      attributes: ['url','preview'],
+  } ],
+  attributes: {
+      include: [
+          [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating'],
+      ],
+  },
+  group: [
+      'Spot.id'
+  ],
+});
+  spotObject = cleanedSpots(ownerSpots)
+  res.json(spotObject);
 });
 
 // Get reviews on a spot
@@ -74,11 +123,24 @@ router.get('/:spotId/reviews', exists, async (req, res, next) => {
   res.json({'reviews': reviews});
 })
 
+router.post('/:spotId/images', requireAuth, exists, isOwned, async (req, res, next) => {
+  const image = await SpotImage.create(Object.assign(
+    req.body,
+    {
+      spotId: req.spot.id,
+    }
+  ))
+  const imageReturn = {};
+  ({id: imageReturn.id, url: imageReturn.url, preview: imageReturn.preview} = image)
+  res.status(201).json(imageReturn)
+})
+
 // Post a review on a spot
 router.post('/:spotId/reviews', requireAuth, exists, reviewExistsForUser, validateReview, async (req, res, next) => {
   const review = await Review.create(Object.assign(
     req.body,
-    {userId: req.user.id,
+    {
+     userId: req.user.id,
      spotId: req.spot.id
     },
   ));
@@ -119,6 +181,9 @@ router.get('/', async (req, res, next) => {
         include: [{
             model: Review,
             attributes: [],
+        }, {
+            model: SpotImage,
+            attributes: ['url', 'preview'],
         } ],
         attributes: {
             include: [
@@ -129,8 +194,9 @@ router.get('/', async (req, res, next) => {
             'Spot.id'
         ],
     });
+    spotObject = cleanedSpots(allSpots)
     res.status(200).json({
-      allSpots
+     "Spots": spotObject
     })
 })
 
@@ -189,18 +255,6 @@ router.post('/', requireAuth, validateSpot, async (req, res,) => {
     res.json(newSpot)
 });
 
-
-const isOwned = async (req, res, next) => {
-
-  if(req.user.id !== req.spot.ownerId) {
-    const err = new Error('Require proper authorization: Spot must belong to the current user');
-    err.status = 403;
-    next(err)
-  }
-  else {
-    next();
-  }
-}
 
 // Edit a spot
 router.put('/:spotId', requireAuth, exists, isOwned, validateSpot, async (req, res, next) => {
