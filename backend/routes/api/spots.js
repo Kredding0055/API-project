@@ -237,7 +237,7 @@ router.get('/', async (req, res, next) => {
     });
     spotObject = cleanedSpots(allSpots)
     res.status(200).json({
-     "Spots": spotObject
+     "Spots": spotObject, page, size
     })
 })
 
