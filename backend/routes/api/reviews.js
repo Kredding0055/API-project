@@ -9,7 +9,7 @@ const { check } = require('express-validator');
 //imports a function for handling errors
 const { handleValidationErrors } = require('../../utils/validation');
 //imports the Spot and Review model
-const { Spot, sequelize, Review, ReviewImage, SpotImage } = require('../../db/models');
+const { Spot, sequelize, Review, ReviewImage, SpotImage, User } = require('../../db/models');
 
 
 

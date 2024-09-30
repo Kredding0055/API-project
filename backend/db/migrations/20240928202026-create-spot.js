@@ -41,11 +41,11 @@ module.exports = {
         allowNull: false
       },
       lat: {
-        type: Sequelize.DOUBLE,
+        type: Sequelize.INTEGER,
         allowNull: false
       },
       lng: {
-        type: Sequelize.DOUBLE,
+        type: Sequelize.INTEGER,
         allowNull: false
       },
       price: {

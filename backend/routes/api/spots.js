@@ -84,6 +84,19 @@ const isOwned = async (req, res, next) => {
   }
 }
 
+const validateQuery = [
+  check('page')
+    .isInt({min: 1})
+    .withMessage( "Page must be greater than or equal to 1"),
+  check('size')
+    .isInt({min: 1})
+    .withMessage( "Size must be greater than or equal to 1"),
+  check('minLat')
+    .isInt()
+    .withMessage("Minimum latitude is invalid"),
+  handleValidationErrors
+]
+
 const validateReview = [
   check('review')
     .exists({checkFalsy: true})
@@ -203,7 +216,6 @@ router.get('/:spotId', exists, async (req, res, next) => {
 
 // Get all spots
 router.get('/', async (req, res, next) => {
-    console.log(req.query)
     let where = {}
     if (req.query.minLat) {
       where.lat = { [Op.gt] : req.query.minLat};
