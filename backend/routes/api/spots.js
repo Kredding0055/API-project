@@ -112,11 +112,11 @@ const validateQuery = [
     .withMessage(''),
   check('minPrice')
     .optional()
-    .isFloat()
+    .isFloat({min: 0})
     .withMessage( "Minimum price must be greater than or equal to 0"),
   check('maxPrice')
     .optional()
-    .isFloat()
+    .isFloat({min: 0})
     .withMessage("Maximum price must be greater than or equal to 0"),
   handleValidationErrors
 ]
@@ -239,7 +239,7 @@ router.get('/:spotId', exists, async (req, res, next) => {
 })
 
 // Get all spots
-router.get('/', async (req, res, next) => {
+router.get('/', validateQuery, async (req, res, next) => {
     let where = {}
     if (req.query.minLat) {
       where.lat = { [Op.gt] : req.query.minLat};
