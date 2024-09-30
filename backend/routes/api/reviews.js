@@ -76,11 +76,11 @@ const cleanedSpots = (allSpots) => {
           spotReturn[ele] = spot.dataValues[ele]
         }
         else if(spot[ele].filter(i => i.dataValues.preview).length > 0) {
-          spotReturn.previewIme = spot.SpotImages.filter(x => x.dataValues.preview)[0].dataValues.url
+          spotReturn.previewImage = spot.SpotImages.filter(x => x.dataValues.preview)[0].dataValues.url
           console.log(spot[ele])
         }
         else {
-          spotReturn.previewIme = null
+          spotReturn.previewImage = null
         }
       });
     //   console.log(spotReturn)
@@ -107,14 +107,26 @@ const cleanedSpots = (allSpots) => {
     return reviewObject
   }
 
-// Get reviews for the current user
+// Get reviews for the current use
 router.get('/current', requireAuth, async (req, res, next) => {
     let reviews = await Review.findAll({
         include: [{
             model: Spot, 
             include: {
                 model: SpotImage
-            }
+            },
+            attributes: [
+              "address",
+         "city",
+         "country",
+         "id",
+         "lat",
+         "lng",
+         "name",
+         "ownerId",
+         "price",
+         "state"
+            ]
         },{
             model: ReviewImage,
             attributes: [ 'id', 'url']

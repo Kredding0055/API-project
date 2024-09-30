@@ -84,18 +84,27 @@ const isOwned = async (req, res, next) => {
   }
 }
 
-const validateQuery = [
-  check('page')
-    .isInt({min: 1})
-    .withMessage( "Page must be greater than or equal to 1"),
-  check('size')
-    .isInt({min: 1})
-    .withMessage( "Size must be greater than or equal to 1"),
-  check('minLat')
-    .isInt()
-    .withMessage("Minimum latitude is invalid"),
-  handleValidationErrors
-]
+// const validateQuery = [
+//   check('page')
+//     .isInt({min: 1})
+//     .withMessage( "Page must be greater than or equal to 1"),
+//   check('size')
+//     .isInt({min: 1})
+//     .withMessage( "Size must be greater than or equal to 1"),
+//   check('minLat')
+//     .isInt()
+//     .withMessage("Minimum latitude is invalid"),
+//   check('maxLat')
+//     .,
+//   check('minLng')
+//     .apply,
+//   check('maxLng')
+//     .,
+//   check('minPrice')
+//     .,
+//   check('maxPrice')
+//   handleValidationErrors
+// ]
 
 const validateReview = [
   check('review')
