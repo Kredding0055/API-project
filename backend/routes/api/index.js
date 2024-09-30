@@ -6,6 +6,7 @@ const { restoreUser } = require("../../utils/auth.js");
 const spotsRouter = require("./spots.js")
 const reviewsRouter = require("./reviews.js")
 const reviewImageRouter = require("./review-images.js")
+const spotImageRouter = require("./spot-images.js")
 
 // Connect restoreUser middleware to the API router
   // If current user session is valid, set req.user to the user in the database
@@ -21,6 +22,8 @@ router.use('/spots', spotsRouter);
 router.use('/reviews', reviewsRouter);
 
 router.use('/review-images', reviewImageRouter)
+
+router.use('/spot-images', spotImageRouter)
 
 router.post('/test', (req, res) => {
   res.json({ requestBody: req.body });

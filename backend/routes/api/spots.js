@@ -18,7 +18,7 @@ const cleanedSpots = (allSpots) => {
 
     Object.keys(spot.dataValues).forEach(ele => {
       if(ele !== "SpotImages") {
-        spotReturn[ele] = spot[ele]
+        spotReturn[ele] = spot.dataValues[ele]
       }
       else if(spot[ele].filter(i => i.dataValues.preview).length > 0) {
         spotReturn.previewIme = spot.SpotImages.filter(x => x.dataValues.preview)[0].dataValues.url
@@ -26,7 +26,6 @@ const cleanedSpots = (allSpots) => {
       }
       else {
         spotReturn.previewIme = null
-        console.log(spot[ele])
       }
     });
     return spotReturn
@@ -105,7 +104,8 @@ router.get('/current', requireAuth,  async (req, res, next) => {
       ],
   },
   group: [
-      'Spot.id'
+      'Spot.id',
+      'SpotImages.id'
   ],
 });
   spotObject = cleanedSpots(ownerSpots)
@@ -156,14 +156,24 @@ router.get('/:spotId', async (req, res, next) => {
         include: [{
             model: Review,
             attributes: [],
-        } ],
+        }, {
+          model: SpotImage,
+          attributes: ['id', 'preview', 'url']
+        },
+      {
+        model: User,
+        as: 'Owner',
+        attributes: ['id', 'firstName', 'lastName']
+      }
+      ],
         attributes: {
             include: [
                 [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating'],
             ],
         },
         group: [
-          'Spot.id'
+          'Spot.id',
+          'SpotImages.id'
         ],
     });
     if(spotId) {
@@ -191,10 +201,13 @@ router.get('/', async (req, res, next) => {
             ],
         },
         group: [
-            'Spot.id'
+            'Spot.id',
+            'SpotImages.id'
         ],
     });
+    // console.log(allSpots)
     spotObject = cleanedSpots(allSpots)
+    // console.log(spotObject)
     res.status(200).json({
      "Spots": spotObject
     })
