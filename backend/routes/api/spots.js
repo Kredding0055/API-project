@@ -128,10 +128,12 @@ router.get('/:spotId/reviews', exists, async (req, res, next) => {
     include: [
       { model: User,
         attributes: [ 'id', 'firstName', 'lastName']
-      }, {
+      }, 
+      {
         model: ReviewImage,
         attributes: ['id', 'url']
-      }],
+      }
+    ],
     where: {
       spotId: req.params.spotId
     }
