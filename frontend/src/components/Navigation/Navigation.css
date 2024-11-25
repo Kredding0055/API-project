@@ -1,0 +1,61 @@
+.hidden {display: none}
+
+.nav-bar{
+    display: flex;
+    align-items: center;
+}
+
+#nav-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0px;
+    padding: 20px;
+}
+
+#homeButton{
+    color: black;
+    font-size:45px;
+}
+
+.nav-list-link {
+    display: flex;
+    list-style: none;   
+    justify-content: center;
+
+    /* gap: 5px; gap will add 5px around everything and will push header left*/
+}
+
+#home-button-image{
+    display: block;
+}
+
+#header{
+    font-size: 40px;
+}
+
+#nav-create-spot {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    text-decoration: none;
+    color: black;
+}
+
+#profileButton{
+    display: flex;
+    align-self: center;
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+}
+
+#profileButton:hover {
+    cursor: pointer;
+}
+
+#profileButtonImage{
+    height: 30px;
+    width: 30px;
+}
+
