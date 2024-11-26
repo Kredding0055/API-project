@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Navigate } from 'react-router-dom';
 import { updateSpotDetails, loadAllSpots } from '../../store/spots';
 import { useEffect } from 'react';
 
@@ -10,13 +10,13 @@ const UpdateSpot = () => {
   const spot = useSelector((state) => state.spots[id]);
   const dispatch = useDispatch('');
   const navigate = useNavigate();
-  
+  const sessionUser = useSelector((state) => state.session.user)
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('')
   const [country, setCountry] = useState('')
   const [name, setName] = useState('')
-  const [description, setDesciption] = useState('')
+  const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
   //will need to find a way to add mutliple files for photo state
   const [photoUrl, setPhotoUrl] = useState('');
@@ -32,37 +32,46 @@ const UpdateSpot = () => {
     setState(spot.state);
     setCountry(spot.country);
     setName(spot.name);
-    setDesciption(spot.description)
+    setDescription(spot.description)
     setPrice(spot.price)
-    }
+    }    
   }, [spot])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // const spotPayload = {
-    //   address,
-    //   city,
-    //   state,
-    //   country,
-    //   name,
-    //   description,
-    //   price,
-    //   photoUrl
-    // };
+    const spotPayload = {
+      address,
+        city,
+        state,
+        country,
+        name,
+        description,
+        lat: 1,
+        lng: 1,
+        price,
+        ownerId: sessionUser.id
+    };
 
-    // let spot = await dispatch(updateSpotDetails(spotPayload));
+    console.log('SpotPayload in the UpdateSpotJSX', spotPayload)
+    let spot = await dispatch(updateSpotDetails(id, spotPayload));
 
       if(spot) {
         navigate(`/spots/${spot.id}`)
       }
   }
 
+  if(!sessionUser) {
+    return <Navigate to='/' />
+  }
+
   return (
     <div>
-      <h1>Welcome to the Update Spot page!!!!</h1>
+      {}
+      <h1>Update your Spot</h1>
       { spot && (
         <form>
+          <h2>Where is your place located?</h2>
           <div>
           <p>Street Address</p>
           <input
@@ -100,7 +109,7 @@ const UpdateSpot = () => {
             value={country}
             onChange={(e) => setCountry(e.target.value)}
           />
-          <p>What do you call your place?</p>
+          <p>Name of your Place?</p>
           <input
             type='text'
             placeholder='Name'
@@ -109,16 +118,16 @@ const UpdateSpot = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <p>Add a Description of your place!</p>
+          <p>Description of your place!</p>
           <input
             type='text'
             placeholder='Description'
             min='25'
             required
             value={description}
-            onChange={(e) => setDesciption(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
           />
-          <p>Set a price for you place</p>
+          <p>Price for you place</p>
           <label>$</label>
           <input
             type='text'
@@ -167,7 +176,7 @@ const UpdateSpot = () => {
           />
           <br/>
           <br/>
-        <button onClick={handleSubmit}>Create Spot</button>
+        <button onClick={handleSubmit}>Update your Spot details</button>
         </div>
       </form>
       )}

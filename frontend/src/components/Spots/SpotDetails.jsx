@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { spotDetailsThunk } from '../../store/spots';
 import mainPic from '../../assets/mainPic.jpeg';
 import secondPic from '../../assets/secondPic.jpeg';

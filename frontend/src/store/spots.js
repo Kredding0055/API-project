@@ -12,13 +12,7 @@ const loadSpots = (spots) => {
         spots
     }
 }
-// used add spot action to get spot details.
-// const spotDetails = (spot) => {
-//     return {
-//         type: SPOT_DETAILS,
-//         spot
-//     }
-// }
+
 
 const addSpot = (spot) => {
     return {
@@ -27,10 +21,17 @@ const addSpot = (spot) => {
     }
 }
 
-const updateSpot = (newSpotDetails) => {
+const updateSpot = (spot) => {
     return {
         type: UPDATE_SPOT,
-        newSpotDetails
+        spot
+    }
+}
+
+const deleteSpot = (id) => {
+    return {
+        type: DELETE_SPOT,
+        id
     }
 }
 
@@ -60,20 +61,6 @@ export const spotDetailsThunk = (id) => async (dispatch) => {
 }
 
 export const createSpot = (payload) => async (dispatch) => {
-    // const response = await fetch(`/api/spots`, {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json'},
-    //     body: JSON.stringify(payload)
-    // });
-    // console.log('response', response)
-    // if(response.ok) {
-    //     const spotData = await response.json();
-    //     dispatch(addSpot(spotData));
-    //     return spotData
-    // }
-    // else {
-    //     return { message: 'Create Spot Thunk didnt work'}
-    // }
     try {
         const response = await csrfFetch(`/api/spots`, {
           method: 'POST',
@@ -92,8 +79,9 @@ export const createSpot = (payload) => async (dispatch) => {
       }
 }
 
+
 export const updateSpotDetails = (id, payload) => async (dispatch) => {
-    const response = await fetch(`api/spots/${id}`, {
+    const response = await csrfFetch(`/api/spots/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify(payload)
@@ -105,6 +93,16 @@ export const updateSpotDetails = (id, payload) => async (dispatch) => {
     }
     else{
         return { message: 'Update spot details thunk didnt work' }
+    }
+}
+
+export const deleteSpotThunk = (id) => async (dispatch) => {
+    const response = await csrfFetch(`/api/spots/${id}`, {
+        method: 'DELETE',
+    });
+    
+    if(response.ok) {
+        dispatch(deleteSpot(id))
     }
 }
 
@@ -122,15 +120,6 @@ const spotsReducer = (state = initialState, action) => {
             action.spots.Spots.forEach((spot) => {newState[spot.id] = spot});
             return newState;
         }
-        // case SPOT_DETAILS: {
-        //     if(!state[action.spot.id]) {
-        //         const newState = {
-        //             ...state, [action.spot.id]: action.spot
-        //         }
-                
-        //     }
-        //     return { ...state, [action.spot.id]: action.spot}
-        // }
         case ADD_SPOT: {
             //this is for the create spot thunk
             if(!state[action.spot.id]) {
@@ -148,6 +137,11 @@ const spotsReducer = (state = initialState, action) => {
         case UPDATE_SPOT: {
             const newState = { ...state}
             newState[action.spot.id] = action.spot
+            return newState;
+        }
+        case DELETE_SPOT: {
+            const newState = { ...state };
+            delete newState[action.id];
             return newState;
         }
         default:

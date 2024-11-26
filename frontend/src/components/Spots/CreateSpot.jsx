@@ -13,7 +13,7 @@ function CreateSpot() {
     const [state, setState] = useState('')
     const [country, setCountry] = useState('')
     const [name, setName] = useState('')
-    const [description, setDesciption] = useState('')
+    const [description, setDescription] = useState('')
     const [price, setPrice] = useState('')
     const [photoUrl, setPhotoUrl] = useState('');
     // console.log('session user', sessionUser)
@@ -49,7 +49,7 @@ function CreateSpot() {
         setState('');
         setCountry('');
         setName('');
-        setDesciption('');
+        setDescription('');
         setPrice('');
         setPhotoUrl('');
     }
@@ -113,7 +113,7 @@ function CreateSpot() {
                 min='25'
                 required
                 value={description}
-                onChange={(e) => setDesciption(e.target.value)}
+                onChange={(e) => setDescription(e.target.value)}
                 />
                 <p>Set a price for you place</p>
                 <label>$</label>
