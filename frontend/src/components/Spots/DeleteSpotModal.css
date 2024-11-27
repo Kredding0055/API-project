@@ -1,15 +1,14 @@
-#modal-content {
-  width: 425px;
-  height: 275px;
-  border: 5px solid black;
-  border-radius: 15px;
-}
+  #modal-content {
+    width: 425px;
+    height: 275px;
+    border: 5px solid black;
+    border-radius: 15px;
+  }
 
 .delete-modal-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
 }
 
 .delete-modal-container > h1 {
