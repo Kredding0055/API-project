@@ -176,7 +176,7 @@ const UpdateSpot = () => {
           />
           <br/>
           <br/>
-        <button onClick={handleSubmit}>Update your Spot details</button>
+        <button onClick={handleSubmit}>Update your Spot</button>
         </div>
       </form>
       )}

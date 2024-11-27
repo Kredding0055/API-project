@@ -1,0 +1,7 @@
+.manage-delete-button:hover {
+  cursor: pointer;
+}
+
+.manage-delete-button{
+  border: none;
+}

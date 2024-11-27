@@ -16,7 +16,6 @@ function CreateSpot() {
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState('')
     const [photoUrl, setPhotoUrl] = useState('');
-    // console.log('session user', sessionUser)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -60,7 +59,20 @@ function CreateSpot() {
         {sessionUser ? (
             <>
             <h2>Create a new Spot</h2>
+            <h3>Where&apos;s your place located?</h3>
+            <p>Guests will only get your exact address once they booked
+                a reservation.
+            </p>
             <form>
+            <p>Country</p>
+                <input
+                type='text'
+                placeholder='Country'
+                min='2'
+                required
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                />
                 <p>Street Address</p>
                 <input
                 type='text'
@@ -88,47 +100,47 @@ function CreateSpot() {
                 value={state}
                 onChange={(e) => setState(e.target.value)}
                 />
-                <p>Country</p>
+                <h3>Describe your place to guests</h3>
+                <p>Mention the best features of your space, any special
+                    amentities like fast wifi or parking, and what you
+                    love about the neighborhood.
+                </p>
                 <input
                 type='text'
-                placeholder='Country'
-                min='2'
+                placeholder='Please write at least 30 characters'
+                min='30'
                 required
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 />
-                <p>What do you call your place?</p>
+                <h3>Create a title for your spot</h3>
+                <p>Catch guests&apos; attention with a spot title that 
+                    highlights what makes your place special.</p>
                 <input
                 type='text'
-                placeholder='Name'
+                placeholder='Name of your spot'
                 min='3'
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 />
-                <p>Add a Description of your place!</p>
-                <input
-                type='text'
-                placeholder='Description'
-                min='25'
-                required
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                />
-                <p>Set a price for you place</p>
+                <h3>Set a base price for your spot</h3>
+                <p>Competitive pricing can help your listing stand 
+                    out and rank higher in search results.</p>
                 <label>$</label>
                 <input
                 type='text'
                 inputMode='numeric'
                 pattern='[0-9]'
-                placeholder='Price'
+                placeholder='Price per night (USD)'
                 min='5'
                 required
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 step='any'
                 />
-                <p>Add photos to your Spot!</p>
+                <h3>Liven up your spot with photos</h3>
+                <p>Submit a link to at least one photo to publish your spot.</p>
                 {/* <input
                 type='url'
                 placeholder='Preview Image URL'

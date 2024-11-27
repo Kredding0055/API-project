@@ -6,7 +6,6 @@ import * as sessionActions from '../../store/session';
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import SignupFormModal from "../SignupFormModal/SignupFormModal";
-import ManageSpots from "../Spots/ManageSpots";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -37,6 +36,7 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
+    setShowMenu(false);
     navigate('/');
   };
 
@@ -53,7 +53,7 @@ function ProfileButton({ user }) {
             <li className="logged-in">Hello, {user.firstName}</li>
             <li className="logged-in">{user.email}</li>
             <br/>
-            <Link to='/spots/current'>Manage Spots</Link>
+            <Link to='/spots/current' onClick={toggleMenu}>Manage Spots</Link>
             <br/>
             <br/>
             <li className="logged-in">

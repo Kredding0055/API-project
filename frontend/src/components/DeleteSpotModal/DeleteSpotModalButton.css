@@ -1,0 +1,15 @@
+.manage-modal-buttons {
+  padding: 3px;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 7px;
+  border-radius: 0%;
+  width: 75px;
+  box-shadow: 3px 3px black;
+  background-color: grey;
+  color: white;
+}
+
+.manage-modal-buttons:hover {
+  cursor: pointer;
+}
