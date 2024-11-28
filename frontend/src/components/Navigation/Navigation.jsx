@@ -17,9 +17,6 @@ function Navigation({ isLoaded }) {
         <li className='nav-list-link'>
           <NavLink to="/" id="homeButton"><ImHome id='home-button-image'/></NavLink>
         </li>
-        <li className='nav-list-link' id='header'>
-          Welcome to the Rent Project!
-        </li>
       {isLoaded && (
         <li className='nav-list-link'>
           {sessionUser ? (

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { loadAllSpots } from "../../store/spots";
 import { useEffect } from "react";
 import DeleteSpotModal from "./DeleteSpotModal";
-import DeleteSpotModalButton from "../DeleteSpotModal/DeleteSpotModalButton";
+import DeleteSpotModalButton from "../DeleteSpotModalButton/DeleteSpotModalButton";
 import './ManageSpots.css';
 
 

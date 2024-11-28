@@ -1,0 +1,13 @@
+.review-button-text {
+  font-size: 15px;
+  margin: 7px;
+  border-radius: 0%;
+  width: fit-content;
+  box-shadow: 3px 3px black;
+  background-color: grey;
+  color: white;
+}
+
+.review-button-text:hover {
+  cursor: pointer;
+}

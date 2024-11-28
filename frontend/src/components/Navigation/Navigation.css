@@ -28,7 +28,6 @@
     padding: 20px;
     width: 150px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: none;
 }
 
 .profile-dropdown.show {
@@ -61,7 +60,7 @@
     color: black;
 }
 
-#profileButton{
+.nav-profile-pic{
     position: relative;
     display: flex;
     align-self: center;
@@ -74,11 +73,19 @@
     cursor: pointer;
 }
 
-#profileButtonImage{
+.profile-pic-image{
     height: 30px;
     width: 30px;
+    color: black;
 }
 
 .logged-in {
     list-style: none;
+}
+
+.profile-buttons {
+    border: none;
+    margin: 3px 0px;
+    background-color: transparent;
+    font-size: 15px;
 }

@@ -8,7 +8,7 @@ import './LoginFormModal.css';
 
 
 function LoginFormModal() {
-  const { setModalContent, closeModal } = useModal();
+  const { modalRef, setModalContent, closeModal } = useModal();
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
@@ -44,7 +44,7 @@ function LoginFormModal() {
   // const demoUserLogin = () => {
     
   // }
-
+  
   return (
     <div className='login-modal-container'>
       {errors && (

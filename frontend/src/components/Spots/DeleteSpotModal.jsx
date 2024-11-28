@@ -6,14 +6,13 @@ import './DeleteSpotModal.css';
 
 function DeleteSpotModal({ spot }) {
   const dispatch = useDispatch();
-  const { closeModal } = useModal();
+  const { closeModal, modalRef } = useModal();
 
   const handleSubmit = async (id) => {
     await dispatch(deleteSpotThunk(id))
     .then(closeModal)
 
   }
-
 
 return (
   <div className='delete-modal-container'>

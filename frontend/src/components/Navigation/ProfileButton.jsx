@@ -6,6 +6,7 @@ import * as sessionActions from '../../store/session';
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import SignupFormModal from "../SignupFormModal/SignupFormModal";
+import './Navigation.css';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ function ProfileButton({ user }) {
   };
 
   useEffect(() => {
-    if (!showMenu) return;
+    // if (!showMenu) return;
 
     const closeMenu = (e) => {
       if (!ulRef.current.contains(e.target)) {
@@ -36,18 +37,18 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
-    setShowMenu(false);
+    // setShowMenu(false);
     navigate('/');
   };
 
-  // const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
   
   return (
     <>
-      <button id="profileButton" onClick={toggleMenu}>
-        <ImUser id='profileButtonImage'/>
+      <button className="nav-profile-pic" onClick={toggleMenu}>
+        <ImUser className='profile-pic-image'/>
       </button>
-      <ul className={`profile-dropdown ${showMenu ? 'show' : 'hidden'}`} ref={ulRef}>
+      <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
             <li className="logged-in">Hello, {user.firstName}</li>
@@ -64,14 +65,14 @@ function ProfileButton({ user }) {
           <>
             <div>
               <OpenModalButton
-                className='modal-buttons'
+                className='profile-buttons'
                 buttonText="Log In"
                 modalComponent={<LoginFormModal />}
               />
             </div>
             <div>
               <OpenModalButton
-                className='modal-buttons'
+                className='profile-buttons'
                 buttonText="Sign Up"
                 modalComponent={<SignupFormModal />}
               />
@@ -83,4 +84,4 @@ function ProfileButton({ user }) {
   );
 }
   
-  export default ProfileButton;
+export default ProfileButton;
