@@ -31,7 +31,13 @@ function Spots() {
                                     {spot.city} {spot.state}
                                 </span>
                                 <span className='spots-star-average'>
-                                    <ImStarFull /> {spot?.avgRating?.toFixed(2)}
+                                    {spot?.Reviews?.length > 0 ? (
+                                        <>
+                                            <ImStarFull /> {spot?.avgRating?.toFixed(2)}
+                                        </>
+                                    ) : ( 
+                                    'New'
+                                    )}
                                 </span>
                             </div>
                             <br/>

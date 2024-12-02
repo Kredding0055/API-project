@@ -77,7 +77,7 @@ const SpotDetails = () => {
                     {reviews?.length > 0 ? (
                       <>
                         <ImStarFull />
-                         {` ${Number(reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length).toFixed(2)} / 5`}
+                         {` ${Number(reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length).toFixed(2)}`}
                       </>
                         ) : (
                       'New' )}
@@ -94,8 +94,21 @@ const SpotDetails = () => {
           )}
       </div>
       <div>
+      <span className='review-stars'>
+                    {reviews?.length > 0 ? (
+                      <>
+                        <ImStarFull />
+                         {` ${Number(reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length).toFixed(2)}`}
+                      </>
+                        ) : (
+                      'New' )}
+                    </span>
+                    &nbsp;
+                    &middot;
+                    &nbsp;
+                    <span className='num-reviews'>{numReviews()}</span>
         <>
-        {owner?.id !== sessionUser.id ? (
+        {sessionUser && owner?.id !== sessionUser.id ? (
           <>
              <OpenModalButton
             className='review-button-text'

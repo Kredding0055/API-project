@@ -6,12 +6,21 @@ import OpenModalButton from "../OpenModalButton/OpenModalButton";
 function Review({ review }) {
   const sessionUser = useSelector(state => state.session.user);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
+  };
 
 
   return (
     <div>
+      <p>{review.User.firstName}</p>
+      <p>{formatDate(review.createdAt)}</p>
       <p>{review.review}</p>
-      {sessionUser.id === review.userId ? (
+      {sessionUser && sessionUser.id === review.userId ? (
         <>
           <OpenModalButton
           className='user-review-modal-button'

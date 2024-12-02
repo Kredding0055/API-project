@@ -15,6 +15,11 @@
   align-items: center;
 }
 
+.form-inputs-container > p {
+  color: red;
+  font-size: 20px;
+}
+
 .signup-input-fields {
   width: 375px;
   height: 25px;
