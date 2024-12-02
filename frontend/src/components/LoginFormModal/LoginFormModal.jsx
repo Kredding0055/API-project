@@ -8,11 +8,11 @@ import './LoginFormModal.css';
 
 
 function LoginFormModal() {
-  const { modalRef, setModalContent, closeModal } = useModal();
+  const { closeModal } = useModal();
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
-  const [loginDisabled, setLoginDisabled] = useState(true)
+  const [loginDisabled, setLoginDisabled] = useState(true);
   const [errors, setErrors] = useState({});
 
   const validateLogin = useCallback(() => {
@@ -47,6 +47,7 @@ function LoginFormModal() {
   
   return (
     <div className='login-modal-container'>
+      <h1>Log In</h1>
       {errors && (
         <div className="error-message">
           {Object.keys(errors).map((key, index) => (
@@ -54,7 +55,6 @@ function LoginFormModal() {
           ))}
         </div>
       )}
-      <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
           <input
             className='input-fields'

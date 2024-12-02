@@ -1,56 +1,64 @@
+.main-container {
+    margin: 30px;
+}
+
 .spots-grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 5px;
+    gap: 20px;
+    row-gap: 40px;
+    max-width: 1500px;
+    margin: 0px auto;
 }
 
 .spots-grid-item {
-   
     height: fit-content;
+}
+
+.spots-grid-item > a {
+    text-decoration: none;
+    font-size: 20px;
 }
 
 .spots-grid-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-.spot-details-container {
-    max-width: 100%;
 }
 
-.spot-details-content {
+.spots-footer-details {
     display: flex;
-    flex-direction: row;
+    color: black;
+    justify-content: space-between;
 }
 
-.main-photo-container {
-    width: 50%;
-    height: 100%;
-    margin: 5px;
+.spots-star-average {
+    align-self: flex-end;
 }
 
-.main-photo-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.tooltip-container {
+    position: relative;
+    display: inline-block;
 }
 
-.image-grid-container {
-    width: 45%;
-    margin: 6px;
+.tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    top: 20px; /* Adjust this value to position the tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
-.image-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    height: 100%;
-    gap: 5px;
-}
-
-.image-grid img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
 }

@@ -32,7 +32,7 @@ function CreateSpot() {
             price,
             ownerId: sessionUser.id
         }
-        console.log('spot payload in create spot', spotPayload);
+        
         let spot = await dispatch(createSpot(spotPayload));
 
         if(spot) {

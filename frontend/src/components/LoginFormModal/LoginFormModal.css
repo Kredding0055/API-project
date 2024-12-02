@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: center;
   height: 50px;
-  width: 375px;
+  width: 380px;
   font-size: 15px;
   font-weight: bold;
   box-shadow: 3px 3px grey;
@@ -25,11 +25,19 @@
   cursor: pointer;
 }
 
+.error-message, .error-message > p {
+  color: red;
+  font-size: 20px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
 .input-fields {
   margin-top: -15px;
   width: 375px;
   height: 25px;
   border: 2px solid black;
+  font-size: 15px;
 }
 
 .demo-button {
@@ -38,6 +46,8 @@
   font-size: 20px;
   text-decoration: underline;
   color: forestgreen;
+  margin-top: 10px;
+  margin-bottom: 35px;
 }
 
 .demo-button:hover {
