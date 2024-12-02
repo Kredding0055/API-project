@@ -6,12 +6,11 @@ import './DeleteSpotModal.css';
 
 function DeleteSpotModal({ spot }) {
   const dispatch = useDispatch();
-  const { closeModal, modalRef } = useModal();
+  const { closeModal } = useModal();
 
   const handleSubmit = async (id) => {
     await dispatch(deleteSpotThunk(id))
     .then(closeModal)
-
   }
 
 return (
@@ -22,7 +21,6 @@ return (
     <button className='Delete-no-button Modal-delete-button' onClick={closeModal}>No (Keep Spot)</button>
   </div>
 
-)
-}
+)}
 
 export default DeleteSpotModal;

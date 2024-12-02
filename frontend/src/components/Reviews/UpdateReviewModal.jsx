@@ -1,16 +1,14 @@
 import { useState, useEffect,  } from 'react';
 import { useDispatch } from 'react-redux';
-// import { useModal } from '../../context/Modal';
-import { createReview } from '../../store/reviews';
+import { updateReviewDetails } from '../../store/reviews';
 import { ImStarEmpty, ImStarFull } from "react-icons/im";
 import { useModal } from '../../context/Modal';
-import './Reviews.css';
 
 
-function ReviewFormModal({ id }) {
+function UpdateReview({ currReview }) {
   const dispatch = useDispatch();
-  const [review, setReview] = useState('');
-  const [starRating, setStarRating] = useState(0);
+  const [review, setReview] = useState(currReview.review);
+  const [starRating, setStarRating] = useState(currReview.stars);
   const [hover, setHover] = useState(0)
   const [submitDisabled, setSubmitDisabled] = useState(true);
   const { closeModal } = useModal();
@@ -41,12 +39,9 @@ function ReviewFormModal({ id }) {
       stars: starRating
     }
 
-    dispatch(createReview(id, reviewPayload));
+    dispatch(updateReviewDetails(currReview.id, reviewPayload));
     closeModal()
 
-    setReview('');
-    setStarRating(0);
-    setHover(0);
   } 
   
   return (
@@ -94,4 +89,4 @@ function ReviewFormModal({ id }) {
   )
 }
 
-export default ReviewFormModal;
+export default UpdateReview;

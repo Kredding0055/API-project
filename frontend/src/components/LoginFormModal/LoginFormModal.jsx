@@ -41,9 +41,16 @@ function LoginFormModal() {
       });
   }
 
-  // const demoUserLogin = () => {
-    
-  // }
+  const demoUserLogin = () => {
+    dispatch(sessionActions.login({ credential: 'Demo-lition' , password: 'password' }))
+    .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
+  }
   
   return (
     <div className='login-modal-container'>
@@ -86,7 +93,7 @@ function LoginFormModal() {
         >Log In</button>
       </form>
         <br/>
-      <button className='demo-button'>Demo User</button>
+      <button className='demo-button' onClick={demoUserLogin}>Demo User</button>
     </div>
   );
 }

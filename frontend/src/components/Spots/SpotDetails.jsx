@@ -18,9 +18,10 @@ const SpotDetails = () => {
   const { id } = useParams();
   const spot = useSelector((state) => state.spots[id]);
   const owner = useSelector((state) => state.spots[id]?.Owner);
+  const sessionUser = useSelector(state => state.session.user);
   const reviews = useSelector((state) => state.reviews[id])
   const dispatch = useDispatch(); 
-
+ 
   const showAlert = () => {
     alert('Feature coming soon...')
   }
@@ -93,11 +94,20 @@ const SpotDetails = () => {
           )}
       </div>
       <div>
-        <OpenModalButton
-          className='review-button-text'
-          buttonText='Post Your Review'
-          modalComponent={<ReviewFormModal id={id} />}
-          />
+        <>
+        {owner?.id !== sessionUser.id ? (
+          <>
+             <OpenModalButton
+            className='review-button-text'
+            buttonText='Post Your Review'
+            modalComponent={<ReviewFormModal id={id} />}
+            />
+          </>
+        ) : (
+        <>
+        </>
+        )}
+        </>
       </div>
       <div>
         <Reviews id={id}/>

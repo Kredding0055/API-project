@@ -15,7 +15,13 @@ function CreateSpot() {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState('')
-    const [photoUrl, setPhotoUrl] = useState('');
+    const [photoUrls, setPhotoUrls] = useState(['','','','','']);
+
+    const addPhoto = (photo, index) => {
+        let photoUrlsCopy = photoUrls.slice()
+        photoUrlsCopy[index] = photo;
+        setPhotoUrls(photoUrlsCopy)
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -50,7 +56,7 @@ function CreateSpot() {
         setName('');
         setDescription('');
         setPrice('');
-        setPhotoUrl('');
+        setPhotoUrls([]);
     }
     
 
@@ -141,39 +147,39 @@ function CreateSpot() {
                 />
                 <h3>Liven up your spot with photos</h3>
                 <p>Submit a link to at least one photo to publish your spot.</p>
-                {/* <input
+                <input
                 type='url'
                 placeholder='Preview Image URL'
                 required
-                value={photoUrl}
-                onChange={(e) => setPhotoUrl(e.target.value)}
+                value={photoUrls[0]}
+                onChange={(e) => addPhoto(e.target.value, 0)}
                 />
                 <input
                 type='url'
                 placeholder='Image URL'
                 required
-                value={photoUrl}
-                onChange={(e) => setPhotoUrl(e.target.value)}
+                value={photoUrls[1]}
+                onChange={(e) => addPhoto(e.target.value, 1)}
                 />
                 <input
                 type='url'
                 placeholder='Image URL'
-                value={photoUrl}
-                onChange={(e) => setPhotoUrl(e.target.value)}
+                value={photoUrls[2]}
+                onChange={(e) => addPhoto(e.target.value, 2)}
                 />
                 <input
                 type='url'
                 placeholder='Image URL'
-                value={photoUrl}
-                onChange={(e) => setPhotoUrl(e.target.value)}
+                value={photoUrls[3]}
+                onChange={(e) => addPhoto(e.target.value, 3)}
                 />
                 <input
                 type='url'
                 placeholder='Image URL'
                 required
-                value={photoUrl}
-                onChange={(e) => setPhotoUrl(e.target.value)}
-                /> */}
+                value={photoUrls[4]}
+                onChange={(e) => addPhoto(e.target.value, 4)}
+                />
                 <br/>
                 <br/>
                 <button onClick={handleSubmit}>Create Spot</button>

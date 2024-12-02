@@ -26,10 +26,10 @@ const updateReview = (review) => {
   }
 };
 
-const deleteReview = (id) => {
+const deleteReview = (id, spotId) => {
   return {
       type: DELETE_REVIEW,
-      id
+      review: {id, spotId}
   }
 };
 
@@ -79,13 +79,13 @@ export const updateReviewDetails = (id, payload) => async (dispatch) => {
   }
 }
 
-export const deleteReviewThunk = (id) => async (dispatch) => {
+export const deleteReviewThunk = (id, spotId) => async (dispatch) => {
   const response = await csrfFetch(`/api/reviews/${id}`, {
       method: 'DELETE',
   });
   
   if(response.ok) {
-      dispatch(deleteReview(id))
+      dispatch(deleteReview(id, spotId))
   }
 }
 
@@ -95,11 +95,10 @@ const reviewsReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_REVIEW: {
       const newState = { ...state };
-      const spot = newState[action.review.spotId];
-      if (spot) {
-          spot.reviews = spot.reviews || [];
-          spot.reviews.push(action.review);
-      }
+      let reviews = newState[action.review.spotId].slice();
+        reviews = reviews || [];
+        reviews.push(action.review);
+        newState[action.review.spotId] = reviews
       return newState;
     }
     case LOAD_REVIEWS: {
@@ -114,6 +113,28 @@ const reviewsReducer = (state = initialState, action) => {
         }
       });
       return newState;
+    }
+    case UPDATE_REVIEW: {
+      const newState = { ...state }
+      const newReviews = newState[action.review.spotId].map(r => {
+        if( r.id === action.review.id) {
+          return action.review
+        }
+        return r
+      })
+      newState[action.review.spotId] = newReviews
+      return newState;
+    }
+    case DELETE_REVIEW: {
+      const newState = { ...state }
+      const newReviews = newState[action.review.spotId].filter(r => {
+        if(r.id !== action.review.id) {
+          return true
+        }
+        return false
+      })
+      newState[action.review.spotId] = newReviews
+      return newState
     }
     default:
       return state
