@@ -4,15 +4,25 @@ import { loadAllReviews } from '../../store/reviews';
 import Review from './Review';
 
 
-function Reviews({ id }) {
+function Reviews({ id, owner }) {
   const dispatch = useDispatch();
   const reviews = useSelector((state) => state.reviews[id]);
+  const sessionUser = useSelector(state => state.session.user);
+
+  const beTheFirstToReview = () => {
+    if((reviews?.length === 0 || !reviews) && owner?.id !== sessionUser?.id) {
+      return true
+    }
+    return false
+  }
   
   useEffect(() => {
     dispatch(loadAllReviews(id))
   }, [dispatch, id]);
 
   return (
+    <>
+    {!beTheFirstToReview() ? (
     <div className='reviews-container'>
       <div>
       {reviews?.slice().reverse().map((review) => (
@@ -21,6 +31,12 @@ function Reviews({ id }) {
       <div>
       </div>
     </div>
+    ) : (
+      <>
+        <h2>Be the first to post a review!</h2>
+      </>
+    )}
+    </>
   )
 
 }

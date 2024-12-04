@@ -37,7 +37,7 @@ const SpotDetails = () => {
 
   const showReviewButton = () => {
     if(sessionUser && owner?.id !== sessionUser.id) {
-      return reviews?.every((review) => review.User?.id !== sessionUser.id)
+      return !reviews || reviews?.every((review) => review.userId !== sessionUser.id)
     }
     return false
   }
@@ -85,13 +85,16 @@ const SpotDetails = () => {
                       <>
                         <ImStarFull />
                          {` ${Number(reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length).toFixed(2)}`}
+                         &nbsp;
+                         &middot;
+                         &nbsp;
                       </>
                         ) : (
-                      'New' )}
+                        <div>
+                          <ImStarFull /><p>New</p>
+                        </div> 
+                    )}
                     </span>
-                    &nbsp;
-                    &middot;
-                    &nbsp;
                     <span className='num-reviews'>{numReviews()}</span>
                     </p>
                   <button onClick={showAlert}>Reserve</button>
@@ -112,7 +115,10 @@ const SpotDetails = () => {
                          <span className='num-reviews'>{numReviews()}</span>
                       </>
                         ) : (
-                          'New' )}
+                          <>
+                          <ImStarFull /> <p>New</p>
+                          </>
+                          )}
                       </span>
         <>
         {showReviewButton() ? (
@@ -120,11 +126,12 @@ const SpotDetails = () => {
             <OpenModalButton
             className='review-button-text'
             buttonText='Post Your Review'
-            modalComponent={<ReviewFormModal id={id} />}
+            modalComponent={<ReviewFormModal id={id} owner={owner}/>}
             />
           </>
         ) : (
         <>
+        
         </>
         )}
         </>
