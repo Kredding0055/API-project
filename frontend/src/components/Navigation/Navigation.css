@@ -24,7 +24,7 @@
     right: 0; /* Changed to right: 0 to align with the profile button */
     background-color: #f9f9f9;
     border: 3px solid #423d3d;
-    border-radius: 7%;
+    border-radius: 10px;
     padding: 20px;
     width: 150px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

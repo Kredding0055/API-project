@@ -17,7 +17,7 @@ function Review({ review }) {
 
   return (
     <div>
-      <p>{review.User.firstName}</p>
+      <p>{review.User?.firstName}</p>
       <p>{formatDate(review.createdAt)}</p>
       <p>{review.review}</p>
       {sessionUser && sessionUser.id === review.userId ? (

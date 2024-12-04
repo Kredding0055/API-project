@@ -34,6 +34,13 @@ const SpotDetails = () => {
       return (`${reviews.length} Reviews`)
     }
   }  
+
+  const showReviewButton = () => {
+    if(sessionUser && owner?.id !== sessionUser.id) {
+      return reviews?.every((review) => review.User?.id !== sessionUser.id)
+    }
+    return false
+  }
   
   useEffect(() => {
     dispatch(spotDetailsThunk(id));
@@ -99,18 +106,18 @@ const SpotDetails = () => {
                       <>
                         <ImStarFull />
                          {` ${Number(reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length).toFixed(2)}`}
+                         &nbsp;
+                         &middot;
+                         &nbsp;
+                         <span className='num-reviews'>{numReviews()}</span>
                       </>
                         ) : (
-                      'New' )}
-                    </span>
-                    &nbsp;
-                    &middot;
-                    &nbsp;
-                    <span className='num-reviews'>{numReviews()}</span>
+                          'New' )}
+                      </span>
         <>
-        {sessionUser && owner?.id !== sessionUser.id ? (
+        {showReviewButton() ? (
           <>
-             <OpenModalButton
+            <OpenModalButton
             className='review-button-text'
             buttonText='Post Your Review'
             modalComponent={<ReviewFormModal id={id} />}

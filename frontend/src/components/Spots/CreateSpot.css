@@ -1,0 +1,83 @@
+.create-spot-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.create-spot-body{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
+  max-width: 600px;
+}
+
+.create-form{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-inputs-top {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-inputs-top > input {
+  padding: 5px;
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;  
+}
+
+.city-state-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.city-state-container input {
+  padding: 5px;
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.city-state-container > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.city-state-container > div > label {
+  margin-bottom: 5px;
+}
+
+.city-state-container > div:first-child {
+  width: 60%;
+}
+
+.city-state-container > div:last-child {
+  width: 38%;
+}
+
+.text-area {
+  width: 100%;
+  height: 150px;
+  resize: none;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  font-size: 17px;
+}
+
+.bottom-div input{
+  padding: 5px;
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box; 
+}
+
+.photo-section {
+  margin: 5px 0px;
+}
