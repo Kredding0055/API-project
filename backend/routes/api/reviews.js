@@ -69,7 +69,6 @@ const tooManyPictures = async (req, res, next) => {
 const cleanedSpots = (allSpots) => {
     const spotObject = allSpots.map(spot => {
       let spotReturn = {};
-      console.log(spot)
   
       Object.keys(spot.dataValues).forEach(ele => {
         if(ele !== "SpotImages") {
@@ -107,7 +106,7 @@ const cleanedSpots = (allSpots) => {
     return reviewObject
   }
 
-// Get reviews for the current use
+// Get reviews for the current user
 router.get('/current', requireAuth, async (req, res, next) => {
     let reviews = await Review.findAll({
         include: [{
@@ -117,15 +116,15 @@ router.get('/current', requireAuth, async (req, res, next) => {
             },
             attributes: [
               "address",
-         "city",
-         "country",
-         "id",
-         "lat",
-         "lng",
-         "name",
-         "ownerId",
-         "price",
-         "state"
+              "city",
+              "country",
+              "id",
+              "lat",
+              "lng",
+              "name",
+              "ownerId",
+              "price",
+              "state"
             ]
         },{
             model: ReviewImage,
