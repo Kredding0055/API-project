@@ -1,0 +1,21 @@
+.manage-buttons {
+  display: flex;
+  margin-top: 10px;
+}
+
+.no-spots-button > button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 35px; 
+  margin-top: 150px;
+  background-color: red;
+  color: white;
+  height: 70px;
+  width: 600px;
+  border-radius: 10px;
+}
+
+.no-spots-button > button:hover {
+  cursor: pointer;
+}

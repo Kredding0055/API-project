@@ -47,7 +47,6 @@ export const loadAllSpots = () => async (dispatch) => {
     // variable can be anything you want. It just is the returned response.json
     if(response.ok) {
         const data = await response.json()
-        // console.log('data', data)
         dispatch(loadSpots(data))
         return data;
     }

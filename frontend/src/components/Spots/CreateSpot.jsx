@@ -17,6 +17,7 @@ function CreateSpot() {
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState('')
     const [photoUrls, setPhotoUrls] = useState(['','','','','']);
+    const [errors, setErrors] = useState({});
 
     const addPhoto = (photo, index) => {
         let photoUrlsCopy = photoUrls.slice()
@@ -27,6 +28,20 @@ function CreateSpot() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const validationErrors = {};
+
+        if (!address) validationErrors.address = 'Address is required';
+        if (!city) validationErrors.city = 'City is required';
+        if (!state) validationErrors.state = 'State is required';
+        if (!country) validationErrors.country = 'Country is required';
+        if (!name) validationErrors.name = 'Name is required';
+        if (!description || description.length < 30) validationErrors.description = 'Description needs 30 or more characters';
+        if (!price) validationErrors.price = 'Price per night is required';
+        if (!photoUrls[0]) validationErrors.photoUrls = 'Preview Image URL is required';
+
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length === 0) {
         const spotPayload = {
             address,
             city,
@@ -48,6 +63,7 @@ function CreateSpot() {
 
         reset();
     }
+}
 
     const reset = () => {
         setAddress('');
@@ -82,6 +98,7 @@ function CreateSpot() {
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
                     />
+                    {errors.country && <p className='error'>{errors.country}</p>}
                     </div>
                     <div className='form-inputs-top'>
                     <label>Street Address</label>
@@ -93,6 +110,7 @@ function CreateSpot() {
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                     />
+                    {errors.address && <p className='error'>{errors.address}</p>}
                     </div>
                     <div className='city-state-container'>
                     <div>
@@ -104,8 +122,9 @@ function CreateSpot() {
                         required
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        />
-                        </div>
+                    />
+                    {errors.city && <p className='error'>{errors.city}</p>}
+                    </div>
                     <div>
                     <label>State</label>
                     <input
@@ -115,8 +134,9 @@ function CreateSpot() {
                         required
                         value={state}
                         onChange={(e) => setState(e.target.value)}
-                        />
-                        </div>
+                    />
+                    {errors.state && <p className='error'>{errors.state}</p>}
+                    </div>
                     </div>
                     <h3>Describe your place to guests</h3>
                     <p>Mention the best features of your space, any special
@@ -131,6 +151,7 @@ function CreateSpot() {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
+                    {errors.description && <p className='error'>{errors.description}</p>}
                     <div className='bottom-div'>
                     <h3>Create a title for your spot</h3>
                     <p>Catch guests&apos; attention with a spot title that 
@@ -142,7 +163,8 @@ function CreateSpot() {
                         required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        />
+                    />
+                    {errors.name && <p className='error'>{errors.name}</p>}
                     <h3>Set a base price for your spot</h3>
                     <p>Competitive pricing can help your listing stand 
                         out and rank higher in search results.</p>
@@ -157,7 +179,8 @@ function CreateSpot() {
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         step='any'
-                        />
+                    />
+                    {errors.price && <p className='error'>{errors.price}</p>}
                     <h3>Liven up your spot with photos</h3>
                     <p>Submit a link to at least one photo to publish your spot.</p>
                     <div className='photo-section'>
@@ -167,7 +190,8 @@ function CreateSpot() {
                         required
                         value={photoUrls[0]}
                         onChange={(e) => addPhoto(e.target.value, 0)}
-                        />
+                    />
+                    {errors.photoUrls && <p className='error'>{errors.photoUrls}</p>}
                     <input
                         type='url'
                         placeholder='Image URL'

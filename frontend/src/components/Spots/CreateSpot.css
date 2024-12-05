@@ -78,6 +78,28 @@
   box-sizing: border-box; 
 }
 
+/* .bottom-div > button {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+} */
+
+.create-spot-container .create-form button {
+  display: flex;
+  margin: 0 auto;
+  margin-bottom: 40px;
+  padding: 10px 25px;
+  font-size: 16px;
+  box-shadow: 3px 3px black;
+  border: 2px solid black;
+  color: white;
+  background-color: red;
+}
+
 .photo-section {
   margin: 5px 0px;
+}
+
+.error {
+  color: red;
 }
