@@ -70,17 +70,14 @@ const SpotDetails = () => {
             <div className='spot-details-footer'>
               <div>  
                 <h1 className='spot-details-footer-h1'>Hosted by {owner?.firstName} {owner?.lastName}</h1>
-                <p>Escape to this charming Cozy Cottage, perfectly blending comfort and 
-                  tranquility in the heart of Anytown. Experience the warmth and 
-                  hospitality of this delightful vacation rental, featuring a private 
-                  patio and picturesque surroundings. Unwind in style and let the stresses
-                   of everyday life melt away in this relaxing retreat.</p>
+                <p>{spot.description}</p>
               </div>
               <div className='price-container'>
-                  <p>
+                  <div >
                     $ {spot.price} 
                     <span className='night-text'> night </span>
-                    <span className='review-stars'>
+                    <span className='num-reviews'>{numReviews()}</span>
+                    <span className='review-stars' style={{ marginLeft: 'auto' }}>
                     {reviews?.length > 0 ? (
                       <>
                         <ImStarFull />
@@ -91,12 +88,11 @@ const SpotDetails = () => {
                       </>
                         ) : (
                         <div>
-                          <ImStarFull /><p>New</p>
+                          <ImStarFull style={{ fontSize: 20 }} /> <span style={{ fontSize: 20 }}>New</span>
                         </div> 
                     )}
                     </span>
-                    <span className='num-reviews'>{numReviews()}</span>
-                    </p>
+                    </div>
                   <button onClick={showAlert}>Reserve</button>
               </div>
             </div>
@@ -105,21 +101,21 @@ const SpotDetails = () => {
       </div>
       <div>
       <span className='review-stars'>
-                    {reviews?.length > 0 ? (
-                      <>
-                        <ImStarFull />
-                         {` ${Number(reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length).toFixed(2)}`}
-                         &nbsp;
-                         &middot;
-                         &nbsp;
-                         <span className='num-reviews'>{numReviews()}</span>
-                      </>
-                        ) : (
-                          <>
-                          <ImStarFull /> <p>New</p>
-                          </>
-                          )}
-                      </span>
+        {reviews?.length > 0 ? (
+        <>
+          <ImStarFull />
+            {` ${Number(reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length).toFixed(2)}`}
+              &nbsp;
+              &middot;
+              &nbsp;
+            <span className='num-reviews'>{numReviews()}</span>
+        </>
+        ) : (
+        <>
+          <ImStarFull style={{ fontSize: 28 }} /> <span style={{ fontSize: 24 }}>New</span>
+        </>
+        )}
+      </span>
         <>
         {showReviewButton() ? (
           <>

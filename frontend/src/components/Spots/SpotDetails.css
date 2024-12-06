@@ -57,39 +57,45 @@
   justify-content: center;
   border: 3px solid black; 
   border-radius: 13px;
-  
+  padding: 20px;
 }
 
-.price-container > p {
-  /* display: flex; */
-  margin-left: 18px;
-  font-size: 16px;
+.price-container > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 22px;
   font-weight: bold;
+  margin-bottom: 20px;
 }
 
-.night-text{
+.price-container > div > span {
+  margin-left: 10px;
+}
+
+.price-container > div > span.night-text {
   font-size: 0.7em;
+}
+
+.price-container > div > span.review-stars {
+  margin-left: 40px;
 }
 
 .review-stars {
   margin-left: 40px;
 }
 
-/* .num-reviews {
-  margin-left: 10px;
-} */
-
 .price-container > button {
   align-self: center;
   height: 50px;
-  width: calc(100% - 40px);
+  width: 100%;
   font-size: 15px;
   font-weight: bold;
   box-shadow: 3px 3px black;
   border: 2px solid black;
   color: white;
   background-color: red;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 .price-container > button:hover {

@@ -107,9 +107,13 @@ const reviewsReducer = (state = initialState, action) => {
         if (!newState[review.spotId]) {
           newState[review.spotId] = [];
         }
-        const existingReview = newState[review.spotId].find((r) => r.id === review.id);
-        if (!existingReview) {
+        if (newState[review.spotId].length === 0) {
           newState[review.spotId].push(review);
+        } else {
+          const existingReview = newState[review.spotId].find((r) => r.id === review.id);
+          if (!existingReview) {
+            newState[review.spotId].push(review);
+          }
         }
       });
       return newState;
