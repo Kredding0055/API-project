@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loadAllSpots } from '../../store/spots';
 import { useEffect } from 'react';
 import { ImStarFull } from 'react-icons/im';
-import mainPic from '../../assets/mainPic.jpeg';
 import './Spots.css';
 
 
@@ -11,6 +10,8 @@ function Spots() {
     const dispatch = useDispatch();
     const spots = useSelector((state) => state.spots)
     const allSpots = Object.values(spots)
+    console.log('spots', spots)
+    console.log('allSpots', allSpots)
     
     useEffect(() => {
         dispatch(loadAllSpots())
@@ -23,7 +24,7 @@ function Spots() {
                     <div key={spot.id} className='spots-grid-item'>
                         <Link to={`spots/${spot.id}`}>
                             <div className='tooltip-container'>
-                                <img src={mainPic} alt={spot.name}/>
+                                <img src={spot.previewImage} alt={spot.name}/>
                                 <span className='tooltip-text'>{spot.name}</span>
                             </div>
                             <div className='spots-footer-details'>

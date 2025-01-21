@@ -5,11 +5,6 @@ import { spotDetailsThunk } from '../../store/spots';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import ReviewFormModal from '../Reviews/ReviewFormModal';
 import Reviews from '../Reviews/Reviews';
-import mainPic from '../../assets/mainPic.jpeg';
-import secondPic from '../../assets/secondPic.jpeg';
-import thirdPic from '../../assets/thirdPic.jpeg';
-import fourthPic from '../../assets/fourthPic.jpeg';
-import fifthPic from '../../assets/fifthPic.jpeg';
 import { ImStarFull } from 'react-icons/im';
 import './SpotDetails.css';
 
@@ -21,6 +16,7 @@ const SpotDetails = () => {
   const sessionUser = useSelector(state => state.session.user);
   const reviews = useSelector((state) => state.reviews[id])
   const dispatch = useDispatch(); 
+  console.log(spot)
  
   const showAlert = () => {
     alert('Feature coming soon...')
@@ -52,18 +48,16 @@ const SpotDetails = () => {
         {spot && (
           <div>
             <h1>{spot.name}</h1>
-            <h2>{spot.city} {spot.state} {spot.country}</h2>
-            
+            <h2>{spot.city} {spot.state} {spot.country}</h2> 
             <div className='spot-details-content'>
               <div className='main-photo-container'>
-                <img src={mainPic}/>
+                <img src={spot.SpotImages?.[0].url} />
               </div>
               <div className='image-grid-container'>
                 <div className='image-grid'>
-                  <img src={secondPic} />
-                  <img src={thirdPic}/>
-                  <img src={fourthPic}/>
-                  <img src={fifthPic}/>
+                {spot.SpotImages?.slice(1).map((image) => (
+                  <img src={image.url} key={image.id} />
+                ))}
                 </div>
               </div>
             </div>

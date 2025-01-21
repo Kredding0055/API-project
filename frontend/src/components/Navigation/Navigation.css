@@ -32,7 +32,6 @@
 }
 
 .profile-dropdown.show {
-    /* width: 100px; */
     display: block;
     margin-right: 25px;
     position: absolute;

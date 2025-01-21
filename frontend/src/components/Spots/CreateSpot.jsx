@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createSpot } from '../../store/spots';
+import { createSpot, addSpotImagesThunk } from '../../store/spots';
 import './CreateSpot.css'
 
 
@@ -57,9 +57,14 @@ function CreateSpot() {
         
         let spot = await dispatch(createSpot(spotPayload));
 
-        if(spot) {
-            navigate(`/spots/${spot.id}`)
-        }
+        const imageUrls = photoUrls.filter((url) => url !== '').map((url, index) => {
+            return {
+              url, // Make sure this field is being passed
+              preview: index === 0,
+            };
+          });
+          await dispatch(addSpotImagesThunk(spot.id, imageUrls));
+          navigate(`/spots/${spot.id}`);
 
         reset();
     }

@@ -5,7 +5,6 @@ import { updateSpotDetails, loadAllSpots } from '../../store/spots';
 import { useEffect } from 'react';
 import './CreateSpot.css'
 
-
 const UpdateSpot = () => {
   const { id } = useParams();
   const spot = useSelector((state) => state.spots[id]);

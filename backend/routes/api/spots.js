@@ -179,15 +179,25 @@ router.get('/:spotId/reviews', exists, async (req, res, next) => {
 })
 
 router.post('/:spotId/images', requireAuth, exists, isOwned, async (req, res, next) => {
-  const image = await SpotImage.create(Object.assign(
-    req.body,
-    {
-      spotId: req.spot.id,
-    }
-  ))
-  const imageReturn = {};
-  ({id: imageReturn.id, url: imageReturn.url, preview: imageReturn.preview} = image)
-  res.status(201).json(imageReturn)
+  try {
+    const images = req.body.map((image, index) => {
+      return {
+        url: image.url, // Make sure this field is being passed
+        spotId: req.spot.id,
+        preview: index === 0,
+      };
+    });
+    const createdImages = await SpotImage.bulkCreate(images);
+    const imageReturns = createdImages.map((image) => {
+      const imageReturn = {};
+      ({ id: imageReturn.id, url: imageReturn.url, preview: imageReturn.preview } = image);
+      return imageReturn;
+    });
+    res.status(201).json(imageReturns);
+  } catch (error) {
+    console.error('Error:', error);
+    next(error);
+  }
 })
 
 // Post a review on a spot

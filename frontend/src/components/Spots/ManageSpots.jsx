@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { ImStarFull } from 'react-icons/im';
 import DeleteSpotModal from "./DeleteSpotModal";
 import DeleteSpotModalButton from "../DeleteSpotModalButton/DeleteSpotModalButton";
-import mainPic from '../../assets/mainPic.jpeg';
 import './ManageSpots.css';
 
 
@@ -43,11 +42,10 @@ function ManageSpots() {
         <div className="spots-grid-container">
           {Object.values(ownerSpots).map((spot) => (
           <div key={spot.id} className='spots-grid-item'>
-            <Link to={`spots/${spot.id}`}>
-              <div className='tooltip-container'>
-                <img src={mainPic} alt={spot.name}/>
-                <span className='tooltip-text'>{spot.name}</span>
-              </div>
+            <div className='tooltip-container'>
+              <img src={spot.previewImage} alt={spot.name} onClick={() => navigate(`/spots/${spot.id}`)}/>
+              <span className='tooltip-text'>{spot.name}</span>
+            </div>
               <div className='spots-footer-details'>
                 {spot.city} {spot.state}
               <br/>
@@ -63,7 +61,6 @@ function ManageSpots() {
               </div>
               <br/>
               ${spot.price} Night
-            </Link>
             <div className="manage-buttons"> 
             <button className="manage-modal-buttons" onClick={() => handleClick(spot.id)}>Update</button>
             <DeleteSpotModalButton

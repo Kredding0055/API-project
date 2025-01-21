@@ -3,6 +3,10 @@
   margin-top: 10px;
 }
 
+.tooltip-container:hover {
+  cursor: pointer;
+}
+
 .no-spots-button > button {
   display: flex;
   justify-content: center;

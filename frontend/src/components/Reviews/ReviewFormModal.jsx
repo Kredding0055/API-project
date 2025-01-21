@@ -85,7 +85,7 @@ function ReviewFormModal({ id }) {
             <h3>Stars</h3>       
           </div>
           <button
-            className={submitDisabled ? 'Review-submit-button' : 'Review-submit-button-enabled  '}
+            className={submitDisabled ? 'Review-submit-button' : 'Review-submit-button-enabled'}
             disabled={submitDisabled}
             type='submit'
           >Submit Your Review</button>

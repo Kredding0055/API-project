@@ -100,7 +100,7 @@ const reviewsReducer = (state = initialState, action) => {
         reviews.push(action.review);
         newState[action.review.spotId] = reviews
       return newState;
-    }
+    } 
     case LOAD_REVIEWS: {
       const newState = { ...state };
       action.reviews.forEach((review) => {
