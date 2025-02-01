@@ -1,4 +1,4 @@
-# AirBnB Clone
+# StayAwhile
 
 ## Database Schema Design
 
